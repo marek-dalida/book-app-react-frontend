@@ -5,8 +5,8 @@ import {
     Redirect,
     Switch,
 } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import LoginPage from "./LoginPage";
+import Dashboard from "./pages/Dashboard";
+import LoginPage from "./pages/LoginPage";
 
 const isAuthorized = Boolean(localStorage.getItem('login'));
 
