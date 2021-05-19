@@ -1,7 +1,7 @@
 import {
     FETCH_BOOKS_REQUEST,
     FETCH_BOOKS_SUCCESS,
-    FETCH_BOOKS_FAILURE, ADD_BOOK_REQUEST, ADD_BOOK_SUCCESS, ADD_BOOK_FAILURE
+    FETCH_BOOKS_FAILURE, ADD_BOOK_REQUEST, ADD_BOOK_SUCCESS, ADD_BOOK_FAILURE, DELETE_BOOK_SUCCESS, DELETE_BOOK_FAILURE
 } from "./types";
 import api from "../api";
 
@@ -69,6 +69,34 @@ export const addBookSuccess = (book) => {
 export const addBookFailure = (error) => {
     return {
         type: ADD_BOOK_FAILURE,
+        payload: error
+    }
+}
+
+export const deleteBook = (id) => {
+    return async (dispatch) => {
+        await api
+            .delete(`dashboard/${id}`)
+            .then(response => {
+                dispatch(deleteBookSuccess(response.data))
+                })
+            .catch(error => {
+                dispatch(deleteBookFailure(error))
+            })
+
+    }
+}
+
+export const deleteBookSuccess = (book) => {
+    return {
+        type: DELETE_BOOK_SUCCESS,
+        payload: book
+    }
+}
+
+export const deleteBookFailure = (error) => {
+    return {
+        type: DELETE_BOOK_FAILURE,
         payload: error
     }
 }

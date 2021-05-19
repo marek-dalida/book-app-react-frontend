@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {bindActionCreators} from "redux";
-import {addBook, fetchBooks} from "../store/bookActions";
+import {addBook, fetchBooks, deleteBook} from "../store/bookActions";
 import {connect} from "react-redux";
 import {Field, Form, Formik} from "formik";
 
@@ -24,8 +24,9 @@ class Dashboard extends Component {
         resetForm({});
     }
 
-    delBook = (id) => {
+    deleteBookRequest = (id) => {
         console.log(id)
+        this.props.deleteBook(id);
     }
 
     componentDidMount() {
@@ -98,7 +99,7 @@ class Dashboard extends Component {
                             <th scope="col">Tytuł</th>
                             <th scope="col">Autor</th>
                             <th scope="col">Rok wydania</th>
-                            <th scope="col">Usuń</th>
+                            {isAdmin && <th scope="col">Usuń</th>}
                         </tr>
                         </thead>
                         <tbody>
@@ -108,9 +109,9 @@ class Dashboard extends Component {
                                 <td> {book.title}</td>
                                 <td> {book.author}</td>
                                 <td> {book.year}</td>
-                                <td>
-                                    <button  className="btn btn-warning" onClick={this.delBook.bind(null, book.id)}>Usuń książkę</button>
-                                </td>
+                                {isAdmin && <td>
+                                    <button  className="btn btn-warning" onClick={this.deleteBookRequest.bind(null, book.id)}>Usuń książkę</button>
+                                </td>}
                             </tr>
                         )}
                         </tbody>
@@ -129,7 +130,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchBooks: bindActionCreators(fetchBooks, dispatch),
-        addBook: bindActionCreators(addBook, dispatch)
+        addBook: bindActionCreators(addBook, dispatch),
+        deleteBook: bindActionCreators(deleteBook, dispatch)
     }
 }
 
