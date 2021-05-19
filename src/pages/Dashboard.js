@@ -1,5 +1,8 @@
 import React, {Component} from "react";
-
+import api from "../api";
+import {bindActionCreators} from "redux";
+import {fetchBooks} from "../store/bookActions";
+import {connect} from "react-redux";
 
 class Dashboard extends Component {
 
@@ -11,12 +14,26 @@ class Dashboard extends Component {
         window.location.reload();
     }
 
+    // getBooks = () => {
+    //     api.get(`/dashboard`)
+    //         .then(response => {
+    //             console.log(response)
+    //         })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }
+
+    componentDidMount() {
+        this.props.fetchBooks()
+    }
+
     render() {
         return (
             <div>
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
                     <div className="container">
-                        <a className="navbar-brand " href="/">Biblioteka dashboard</a>
+                        <a className="navbar-brand " href="/dashboard">Biblioteka dashboard</a>
                         <div className="navbar-nav ms-auto me-3">
                             <span className='navbar-text text-light'>
                                 Jesteś zalogowany jako: <b> {localStorage.getItem('login')} </b></span>
@@ -33,4 +50,14 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+   books: state
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchBooks: bindActionCreators(fetchBooks, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
