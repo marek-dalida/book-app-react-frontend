@@ -24,12 +24,6 @@ class Dashboard extends Component {
         resetForm({});
     }
 
-    deleteBook = (values, {setSubmitting, resetForm}) => {
-        console.log(values)
-        setSubmitting(false);
-        resetForm({});
-    }
-
     delBook = (id) => {
         console.log(id)
     }
@@ -90,36 +84,6 @@ class Dashboard extends Component {
                                 </div>
                                     <button type="submit" className="btn btn-secondary mt-2 mb-4"
                                             disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Dodaj książkę"}</button>
-                            </Form>
-                        </div>
-
-                    )}
-                </Formik>}
-
-
-                {isAdmin && <Formik
-                    initialValues={{
-                        bookId: ''
-                    }}
-                    onSubmit={(values, {setSubmitting, resetForm}) => {
-                        this.deleteBook(values, {setSubmitting, resetForm});
-                    }}
-                >
-                    {({isSubmitting}) => (
-                        <div className="col-4 offset-4">
-                            <Form>
-                                <h4 className="text-center h4 mt-3">Usuwanie książki</h4>
-
-                                <div className="form-group">
-                                    <label htmlFor="bookId">Podaj id książki do usunięcia</label>
-                                    <Field name="bookId" className="form-control" type="text"
-                                           placeholder="Id książki do usunięcia"/>
-                                </div>
-
-                                <div className="float-end">
-                                    <button type="submit" className="btn btn-warning mt-2 mb-4"
-                                            disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Usuń książkę"}</button>
-                                </div>
                             </Form>
                         </div>
 
