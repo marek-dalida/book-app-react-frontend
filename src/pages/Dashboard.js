@@ -1,10 +1,13 @@
 import React, {Component} from "react";
-import api from "../api";
 import {bindActionCreators} from "redux";
-import {fetchBooks} from "../store/bookActions";
+import {addBook, fetchBooks} from "../store/bookActions";
 import {connect} from "react-redux";
+import {Field, Form, Formik} from "formik";
+
+const isAdmin = Boolean(localStorage.getItem('login') === 'admin');
 
 class Dashboard extends Component {
+
 
     logout = () => {
         localStorage.removeItem('login');
@@ -14,15 +17,22 @@ class Dashboard extends Component {
         window.location.reload();
     }
 
-    // getBooks = () => {
-    //     api.get(`/dashboard`)
-    //         .then(response => {
-    //             console.log(response)
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    // }
+    addBook = (values, {setSubmitting, resetForm}) => {
+        console.log(values)
+        this.props.addBook(values);
+        setSubmitting(false);
+        resetForm({});
+    }
+
+    deleteBook = (values, {setSubmitting, resetForm}) => {
+        console.log(values)
+        setSubmitting(false);
+        resetForm({});
+    }
+
+    delBook = (id) => {
+        console.log(id)
+    }
 
     componentDidMount() {
         this.props.fetchBooks()
@@ -38,25 +48,124 @@ class Dashboard extends Component {
                             <span className='navbar-text text-light'>
                                 Jesteś zalogowany jako: <b> {localStorage.getItem('login')} </b></span>
                         </div>
-                        <div className="nav-item" id="logoutForm">
                             <button className="btn btn-outline-success my-2 my-sm-0" onClick={this.logout}
                                     type="submit">Wyloguj
                             </button>
-                        </div>
                     </div>
                 </nav>
+
+
+                {isAdmin && <Formik
+                    initialValues={{
+                        title: '',
+                        author: '',
+                        year: ''
+                    }}
+                    onSubmit={(values, {setSubmitting, resetForm}) => {
+                        this.addBook(values, {setSubmitting, resetForm});
+                    }}
+                >
+                    {({isSubmitting}) => (
+                        <div className="col-4 offset-4">
+                            <Form>
+                                <h4 className="text-center h4 mt-4">Dodawanie książki</h4>
+
+                                <div className="form-group">
+                                    <label htmlFor="title">Tytuł</label>
+                                    <Field name="title" className="form-control" type="text"
+                                           placeholder="Podaj tytuł książki"/>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="author">Autor</label>
+                                    <Field name="author" className="form-control"  placeholder="Podaj autora książki"
+                                           type="text"/>
+                                </div>
+
+
+                                <div className="form-group">
+                                    <label htmlFor="year">Rok wydania</label>
+                                    <Field name="year" className="form-control" placeholder="Podaj rok wydania"
+                                           type="number"/>
+                                </div>
+                                    <button type="submit" className="btn btn-secondary mt-2 mb-4"
+                                            disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Dodaj książkę"}</button>
+                            </Form>
+                        </div>
+
+                    )}
+                </Formik>}
+
+
+                {isAdmin && <Formik
+                    initialValues={{
+                        bookId: ''
+                    }}
+                    onSubmit={(values, {setSubmitting, resetForm}) => {
+                        this.deleteBook(values, {setSubmitting, resetForm});
+                    }}
+                >
+                    {({isSubmitting}) => (
+                        <div className="col-4 offset-4">
+                            <Form>
+                                <h4 className="text-center h4 mt-3">Usuwanie książki</h4>
+
+                                <div className="form-group">
+                                    <label htmlFor="bookId">Podaj id książki do usunięcia</label>
+                                    <Field name="bookId" className="form-control" type="text"
+                                           placeholder="Id książki do usunięcia"/>
+                                </div>
+
+                                <div className="float-end">
+                                    <button type="submit" className="btn btn-warning mt-2 mb-4"
+                                            disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Usuń książkę"}</button>
+                                </div>
+                            </Form>
+                        </div>
+
+                    )}
+                </Formik>}
+
+                <div className="col-8 offset-2">
+                    <table className="table table-striped mt-5">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tytuł</th>
+                            <th scope="col">Autor</th>
+                            <th scope="col">Rok wydania</th>
+                            <th scope="col">Usuń</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.props.books && this.props.books.booksData.map(book =>
+                            <tr key={book.id}>
+                                <td> {book.id} </td>
+                                <td> {book.title}</td>
+                                <td> {book.author}</td>
+                                <td> {book.year}</td>
+                                <td>
+                                    <button  className="btn btn-warning" onClick={this.delBook.bind(null, book.id)}>Usuń książkę</button>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-   books: state
+    books: state
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchBooks: bindActionCreators(fetchBooks, dispatch)
+        fetchBooks: bindActionCreators(fetchBooks, dispatch),
+        addBook: bindActionCreators(addBook, dispatch)
     }
 }
 

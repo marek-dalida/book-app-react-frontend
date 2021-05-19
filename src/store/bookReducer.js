@@ -1,4 +1,11 @@
-import {FETCH_BOOKS_FAILURE, FETCH_BOOKS_REQUEST, FETCH_BOOKS_SUCCESS} from "./types";
+import {
+    ADD_BOOK_FAILURE,
+    ADD_BOOK_REQUEST,
+    ADD_BOOK_SUCCESS,
+    FETCH_BOOKS_FAILURE,
+    FETCH_BOOKS_REQUEST,
+    FETCH_BOOKS_SUCCESS
+} from "./types";
 
 const initialState = {
     isFetching: false,
@@ -23,6 +30,23 @@ const booksReducer = (state = initialState, action) => {
             return {
                 isFetching: false,
                 booksData: [],
+                error: action.payload
+            }
+        case ADD_BOOK_REQUEST:
+            return {
+                ...state,
+                isFetching: true
+            }
+        case ADD_BOOK_SUCCESS:
+            return {
+                isFetching: false,
+                booksData: [...state.booksData, action.payload],
+                error: ''
+            }
+        case ADD_BOOK_FAILURE:
+            return {
+                isFetching: false,
+                booksData: state.booksData,
                 error: action.payload
             }
         default:

@@ -48,7 +48,7 @@ class LoginPage extends Component {
                             this.loginToSystem(values, {setSubmitting});
                         }}
                     >
-                        {({isSubmitting, errors, touched}) => (
+                        {({isSubmitting}) => (
                             <Form>
                                 <div className="form-group">
                                     <label htmlFor="username">Login</label>

@@ -1,7 +1,7 @@
 import {
     FETCH_BOOKS_REQUEST,
     FETCH_BOOKS_SUCCESS,
-    FETCH_BOOKS_FAILURE
+    FETCH_BOOKS_FAILURE, ADD_BOOK_REQUEST, ADD_BOOK_SUCCESS, ADD_BOOK_FAILURE
 } from "./types";
 import api from "../api";
 
@@ -14,7 +14,7 @@ export const fetchBooks = () => {
                 dispatch(fetchBookSuccess(books))
             })
             .catch(error => {
-                console.log(error)
+                dispatch(fetchBookFailure(error))
             })
     }
 }
@@ -33,9 +33,42 @@ export const fetchBookSuccess = (books) => {
     }
 }
 
-export const fetchArchiveFailure = (error) => {
+export const fetchBookFailure = (error) => {
     return {
         type: FETCH_BOOKS_FAILURE,
+        payload: error
+    }
+}
+
+export const addBook = (book) => {
+    return async (dispatch) => {
+        dispatch(addBookRequest)
+        await api.post(`/dashboard`, book)
+            .then(response => {
+                dispatch(addBookSuccess(response.data))
+            })
+            .catch(error => {
+                dispatch(addBookFailure(error))
+            })
+    }
+}
+
+export const addBookRequest = () => {
+    return {
+        type: ADD_BOOK_REQUEST
+    }
+}
+
+export const addBookSuccess = (book) => {
+    return {
+        type: ADD_BOOK_SUCCESS,
+        payload: book
+    }
+}
+
+export const addBookFailure = (error) => {
+    return {
+        type: ADD_BOOK_FAILURE,
         payload: error
     }
 }
