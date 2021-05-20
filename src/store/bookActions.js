@@ -14,6 +14,7 @@ export const fetchBooks = () => {
                 dispatch(fetchBookSuccess(books))
             })
             .catch(error => {
+                alert('Wystąpił błąd podczas pobierania danych')
                 dispatch(fetchBookFailure(error))
             })
     }
@@ -48,6 +49,7 @@ export const addBook = (book) => {
                 dispatch(addBookSuccess(response.data))
             })
             .catch(error => {
+                alert('Wystąpił błąd podczas dodawania książki')
                 dispatch(addBookFailure(error))
             })
     }
@@ -81,6 +83,7 @@ export const deleteBook = (id) => {
                 dispatch(deleteBookSuccess(response.data))
                 })
             .catch(error => {
+                alert('Wystąpił błąd podczas usuwania książki')
                 dispatch(deleteBookFailure(error))
             })
 
