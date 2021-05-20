@@ -9,7 +9,6 @@ class App extends Component {
         <Provider store={store}>
           <AppRouter/>
         </Provider>
-
     )
   }
 }

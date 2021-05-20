@@ -3,11 +3,11 @@ import {bindActionCreators} from "redux";
 import {addBook, fetchBooks, deleteBook} from "../store/bookActions";
 import {connect} from "react-redux";
 import {Field, Form, Formik} from "formik";
+import Navbar from "../components/Navbar";
 
 const isAdmin = Boolean(localStorage.getItem('login') === 'admin');
 
 class Dashboard extends Component {
-
 
     logout = () => {
         localStorage.removeItem('login');
@@ -18,7 +18,6 @@ class Dashboard extends Component {
     }
 
     addBook = (values, {setSubmitting, resetForm}) => {
-        console.log(values)
         this.props.addBook(values);
         setSubmitting(false);
         resetForm({});
@@ -36,19 +35,7 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-                    <div className="container">
-                        <a className="navbar-brand " href="/dashboard">Biblioteka dashboard</a>
-                        <div className="navbar-nav ms-auto me-3">
-                            <span className='navbar-text text-light'>
-                                Jesteś zalogowany jako: <b> {localStorage.getItem('login')} </b></span>
-                        </div>
-                            <button className="btn btn-outline-success my-2 my-sm-0" onClick={this.logout}
-                                    type="submit">Wyloguj
-                            </button>
-                    </div>
-                </nav>
-
+                <Navbar />
 
                 {isAdmin && <Formik
                     initialValues={{
@@ -83,8 +70,8 @@ class Dashboard extends Component {
                                     <Field name="year" className="form-control" placeholder="Podaj rok wydania"
                                            type="number"/>
                                 </div>
-                                    <button type="submit" className="btn btn-secondary mt-2 mb-4"
-                                            disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Dodaj książkę"}</button>
+                                <button type="submit" className="btn btn-secondary mt-2 mb-4"
+                                        disabled={isSubmitting}>{isSubmitting ? "Czekaj ..." : "Dodaj książkę"}</button>
                             </Form>
                         </div>
 
